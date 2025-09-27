@@ -1,5 +1,5 @@
 import express from "express";
-import cheerio from "cheerio";
+import { load } from "cheerio";
 import OpenAI from "openai";
 
 const PORT = process.env.PORT || 3000;
@@ -42,7 +42,7 @@ app.post("/api/analyze", async (req, res) => {
     }
 
     const html = await response.text();
-    const $ = cheerio.load(html);
+    const $ = load(html);
     const text = $("body")
       .text()
       .replace(/\s+/g, " ")
