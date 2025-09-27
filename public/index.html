@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms &amp; Conditions Risk Analyzer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="card">
+        <h1>Terms &amp; Conditions Risk Analyzer</h1>
+        <p class="lead">
+          Paste the URL to any Terms &amp; Conditions page and let AI summarize the
+          risks in plain language.
+        </p>
+        <form id="analyze-form">
+          <label for="terms-url">Terms &amp; Conditions URL</label>
+          <div class="input-group">
+            <input
+              id="terms-url"
+              name="terms-url"
+              type="url"
+              placeholder="https://example.com/terms"
+              required
+            />
+            <button type="submit">Analyze</button>
+          </div>
+        </form>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </section>
+      <section class="card">
+        <h2>Analysis</h2>
+        <article id="analysis" class="analysis"></article>
+      </section>
+    </main>
+    <footer>
+      <p>
+        Powered by the OpenAI API. Please double-check results with a legal
+        professional before making decisions.
+      </p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
