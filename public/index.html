@@ -65,7 +65,7 @@
         ></div>
       </section>
       <section id="app-section" class="app hidden" aria-live="polite">
-        <div class="card card-tight">
+        <div class="card card-tight card-wide">
           <div class="app-header">
             <div>
               <h2>Analyze a policy</h2>
@@ -89,6 +89,19 @@
             </div>
           </form>
           <div id="status" class="status" role="status" aria-live="polite"></div>
+        </div>
+        <div class="card history-card">
+          <div class="history-header">
+            <h2>Recent analyses</h2>
+            <p class="muted small">
+              Revisit previously reviewed policies from this session.
+            </p>
+          </div>
+          <div id="history-empty" class="history-empty muted">
+            No analyses yet. Your history will appear here after you review a
+            policy.
+          </div>
+          <ul id="history-list" class="history-list" aria-live="polite"></ul>
         </div>
         <div class="card">
           <h2>Analysis</h2>
