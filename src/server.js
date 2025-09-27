@@ -1,14 +1,81 @@
 import express from "express";
 import { load } from "cheerio";
 import OpenAI from "openai";
+import crypto from "crypto";
 
 const PORT = process.env.PORT || 3000;
+
+const TEST_CREDENTIALS = {
+  username: "demo",
+  password: "opensesame"
+};
+
+const activeTokens = new Set();
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static("public"));
 
-app.post("/api/analyze", async (req, res) => {
+function extractToken(req) {
+  const authHeader = req.get("authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return null;
+  }
+
+  return authHeader.slice("Bearer ".length).trim();
+}
+
+function requireAuth(req, res, next) {
+  const token = extractToken(req);
+
+  if (!token || !activeTokens.has(token)) {
+    return res.status(401).json({
+      error: "Unauthorized. Please log in again."
+    });
+  }
+
+  req.token = token;
+  next();
+}
+
+app.post("/api/login", (req, res) => {
+  const { username, password } = req.body ?? {};
+
+  if (
+    typeof username !== "string" ||
+    typeof password !== "string" ||
+    username.trim() !== TEST_CREDENTIALS.username ||
+    password !== TEST_CREDENTIALS.password
+  ) {
+    return res.status(401).json({ error: "Invalid username or password." });
+  }
+
+  const token = crypto.randomUUID();
+  activeTokens.add(token);
+
+  res.json({
+    token,
+    message: "Login successful."
+  });
+});
+
+app.post("/api/logout", (req, res) => {
+  const token = extractToken(req);
+
+  if (!token) {
+    return res
+      .status(400)
+      .json({ error: "A valid authorization token is required to log out." });
+  }
+
+  if (activeTokens.delete(token)) {
+    return res.json({ success: true });
+  }
+
+  return res.status(400).json({ error: "The provided session is not active." });
+});
+
+app.post("/api/analyze", requireAuth, async (req, res) => {
   const { url } = req.body ?? {};
 
   if (!process.env.OPENAI_API_KEY) {

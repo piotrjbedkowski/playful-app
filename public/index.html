@@ -7,31 +7,93 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="app">
-      <section class="card">
+    <header class="hero">
+      <div class="hero-content">
+        <p class="badge">New</p>
         <h1>Terms &amp; Conditions Risk Analyzer</h1>
         <p class="lead">
-          Paste the URL to any Terms &amp; Conditions page and let AI summarize the
-          risks in plain language.
+          Understand the fine print before you click “I agree”. Paste any
+          policy URL and our AI will surface the clauses that deserve a closer
+          look.
         </p>
-        <form id="analyze-form">
-          <label for="terms-url">Terms &amp; Conditions URL</label>
-          <div class="input-group">
-            <input
-              id="terms-url"
-              name="terms-url"
-              type="url"
-              placeholder="https://example.com/terms"
-              required
-            />
-            <button type="submit">Analyze</button>
-          </div>
+        <ul class="feature-list">
+          <li>🔍 Pinpoints liability traps, auto-renewals, and data sharing</li>
+          <li>🛡️ Highlights user protections worth knowing about</li>
+          <li>⚡ Generates a readable summary in seconds</li>
+        </ul>
+      </div>
+    </header>
+    <main class="layout">
+      <section id="login-section" class="card auth-card" aria-labelledby="login-title">
+        <h2 id="login-title">Sign in to explore the analyzer</h2>
+        <p class="muted">
+          Use the shared demo credentials to unlock the analysis workspace.
+        </p>
+        <div class="credentials">
+          <p>
+            <strong>Username:</strong> <code>demo</code>
+          </p>
+          <p>
+            <strong>Password:</strong> <code>opensesame</code>
+          </p>
+        </div>
+        <form id="login-form" autocomplete="on">
+          <label for="username">Username</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            inputmode="text"
+            autocomplete="username"
+            required
+          />
+          <label for="password">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          />
+          <button type="submit">Sign in</button>
         </form>
-        <div id="status" class="status" role="status" aria-live="polite"></div>
+        <div
+          id="login-status"
+          class="status"
+          role="status"
+          aria-live="polite"
+        ></div>
       </section>
-      <section class="card">
-        <h2>Analysis</h2>
-        <article id="analysis" class="analysis"></article>
+      <section id="app-section" class="app hidden" aria-live="polite">
+        <div class="card card-tight">
+          <div class="app-header">
+            <div>
+              <h2>Analyze a policy</h2>
+              <p class="muted">Paste the Terms &amp; Conditions URL to begin.</p>
+            </div>
+            <button type="button" class="secondary" id="logout-button">
+              Log out
+            </button>
+          </div>
+          <form id="analyze-form">
+            <label for="terms-url">Terms &amp; Conditions URL</label>
+            <div class="input-group">
+              <input
+                id="terms-url"
+                name="terms-url"
+                type="url"
+                placeholder="https://example.com/terms"
+                required
+              />
+              <button type="submit">Analyze</button>
+            </div>
+          </form>
+          <div id="status" class="status" role="status" aria-live="polite"></div>
+        </div>
+        <div class="card">
+          <h2>Analysis</h2>
+          <article id="analysis" class="analysis"></article>
+        </div>
       </section>
     </main>
     <footer>
