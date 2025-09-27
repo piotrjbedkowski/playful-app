@@ -11,6 +11,7 @@ const TEST_CREDENTIALS = {
 };
 
 const activeTokens = new Set();
+const analysisHistory = new Map();
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
@@ -69,6 +70,7 @@ app.post("/api/logout", (req, res) => {
   }
 
   if (activeTokens.delete(token)) {
+    analysisHistory.delete(token);
     return res.json({ success: true });
   }
 
@@ -152,7 +154,18 @@ app.post("/api/analyze", requireAuth, async (req, res) => {
       });
     }
 
-    res.json({ result: content });
+    const analysisRecord = {
+      id: crypto.randomUUID(),
+      url: parsedUrl.toString(),
+      analyzedAt: new Date().toISOString(),
+      result: content
+    };
+
+    const history = analysisHistory.get(req.token) ?? [];
+    history.unshift(analysisRecord);
+    analysisHistory.set(req.token, history.slice(0, 10));
+
+    res.json({ result: content, analysis: analysisRecord });
   } catch (error) {
     console.error("Analysis error", error);
     res.status(500).json({
@@ -160,6 +173,11 @@ app.post("/api/analyze", requireAuth, async (req, res) => {
       details: error.message
     });
   }
+});
+
+app.get("/api/history", requireAuth, (req, res) => {
+  const history = analysisHistory.get(req.token) ?? [];
+  res.json({ history });
 });
 
 app.listen(PORT, () => {
